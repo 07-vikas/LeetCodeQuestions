@@ -1,0 +1,66 @@
+class Solution {
+    public TreeNode createBinaryTree(int[][] descriptions) {
+        return fn( descriptions);
+    }
+    public TreeNode fn( int[][] ar){
+        Set<Integer> set = new HashSet<>();
+        Map<Integer, TreeNode> map = new HashMap<>();
+        Set<Integer> st = new HashSet<>();
+
+        for( int[] i : ar){
+            int parent = i[0];
+            int child = i[1];
+
+            if( map.containsKey( parent)){
+                if( map.containsKey( child)){
+                    //map.get( parent).left = map.get( child);
+                    if( i[2] == 1){
+                        map.get( parent).left = map.get( child);
+                    }else{
+                        map.get( parent).right = map.get( child);
+                    }
+                }else{
+                    TreeNode newNode = new TreeNode(child);
+                    map.put( child, newNode);
+                    if( i[2] == 1){
+                        map.get( parent).left = map.get( child);
+                    }else{
+                        map.get( parent).right = map.get( child);
+                    }
+                }
+            }else{
+                TreeNode newParentNode = new TreeNode( parent);
+                map.put( parent, newParentNode);
+                if( map.containsKey( child)){
+                    //map.get( parent).left = map.get( child);
+                    if( i[2] == 1){
+                        map.get( parent).left = map.get( child);
+                    }else{
+                        map.get( parent).right = map.get( child);
+                    }
+                }else{
+                    TreeNode newNode = new TreeNode(child);
+                    map.put( child, newNode);
+                    if( i[2] == 1){
+                        map.get( parent).left = map.get( child);
+                    }else{
+                        map.get( parent).right = map.get( child);
+                    }
+                }
+            }
+
+            set.add( parent);
+            set.remove( child);
+            st.add( child);
+        }
+
+        int value = 0;
+
+        for( int i : set){
+            if( st.contains( i))continue;
+            value = i;
+        }
+
+        return map.get( value);
+    }
+}

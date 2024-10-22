@@ -1,0 +1,47 @@
+class Solution {
+    public int pseudoPalindromicPaths (TreeNode root) {
+        int[] ar = new int[10];
+        List<Integer> ls = new ArrayList<>();
+        ls.add( 0);
+        fn( root, ar, ls, 1);
+        return ls.get( 0);
+    }
+    private void fn( TreeNode node, int[] ar, List<Integer> ls, int lvl){
+        if( node.left == null && node.right == null){
+            ar[node.val]++;
+            if( check( ar, lvl)){
+                ls.set( 0, ls.get( 0)+1);
+                ar[node.val]--;
+                return;
+            }
+            ar[node.val]--;
+            return;
+        }
+
+        ar[node.val]++;// before any call left or right mark the presence of current node;
+        if( node.left != null)fn( node.left, ar, ls, lvl+1);
+        if( node.right != null)fn( node.right, ar, ls, lvl+1);
+
+        ar[node.val]--;
+
+        return;
+    }
+    private boolean check( int[] ar, int n){
+        int x = 0;
+        
+        if( n%2 == 0){
+            for( int i : ar){
+                if( i%2 != 0)return false;
+            }
+            return true;
+        } 
+
+        for( int i : ar){
+            if( i%2 != 0)x++;
+        }
+
+        if( x > 1)return false;
+
+        return true;
+    }
+}

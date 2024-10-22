@@ -1,0 +1,80 @@
+class Pair{
+    int idx;
+    int value;
+
+    public Pair( int a, int b){
+        this.idx = a;
+        this.value = b;
+    }
+ }
+class Solution {
+    public int minimumOperations(TreeNode root) {
+        return fn( root);
+    }
+    public int fn( TreeNode node){
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer( node);
+        //int lvl = 0;
+        List<List<Integer>> lst = new ArrayList<>();
+
+        while( !q.isEmpty()){
+            //lvl++;
+            int x = q.size();
+
+            List<Integer> ls = new ArrayList<>();
+            
+                for( int i = 0; i<x; i++){
+                    TreeNode tn = q.poll();
+                    ls.add( tn.val);
+
+                    if( tn.left != null){
+                        q.offer( tn.left);
+                        //q.offer( tn.right);
+                    }
+                    if( tn.right != null)q.offer( tn.right);
+                }
+                lst.add( ls);
+        }
+        int count = 0;
+
+        for( List<Integer> l : lst){
+            count+=helper( l);
+        }
+
+        return count;
+    }
+    public int helper( List<Integer> ls){
+        List<Pair> lst = new ArrayList<>();
+        Comparator<Pair> pc = new Comparator<>(){
+            public int compare( Pair p1, Pair p2){
+                return Integer.compare( p1.value, p2.value);
+            }
+        };
+
+        for( int i = 0; i<ls.size(); i++){
+            lst.add( new Pair( i, ls.get( i)));
+        }
+
+        Collections.sort( lst, pc);
+
+        int count = 0;
+
+        int i = 0; 
+        while( i < ls.size()){
+            if( lst.get( i).idx == i){
+                i++;
+                continue;
+            }
+
+            Pair p1 = lst.get( i);
+            int x = lst.get( i).idx;
+            Pair p2 = lst.get( x);
+
+            lst.set( i, p2);
+            lst.set( x, p1);
+            count ++;
+        }
+
+        return count;
+    }
+}

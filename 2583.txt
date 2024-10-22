@@ -1,0 +1,35 @@
+class Solution {
+    public long kthLargestLevelSum(TreeNode root, int k) {
+        return fn( root, k);
+    }
+    public long fn( TreeNode node, int k){
+        List<Long> ls = helper( node);
+        int n = ls.size();
+
+        if( n < k )return -1L;
+
+        Collections.sort( ls);
+
+        return ls.get( n-k);
+    }
+    public List<Long> helper( TreeNode node){
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer( node);
+        List<Long> lst = new ArrayList<>();
+
+        while( !q.isEmpty()){
+            int x = q.size();
+            long sum = 0L;
+            for( int i = 0; i<x; i++){
+                TreeNode tn = q.poll();
+                sum+=tn.val;
+
+                if( tn.left != null)q.offer( tn.left);
+                if( tn.right != null)q.offer( tn.right);
+            }
+            lst.add( sum);
+        }
+
+        return lst;
+    }
+}
