@@ -1,0 +1,53 @@
+class Solution {
+    public TreeNode replaceValueInTree(TreeNode root) {
+        return fn( root);
+    }
+    private TreeNode fn( TreeNode node){
+        List<Integer> ls = new ArrayList<>();
+
+        helper( ls, node, 0);
+
+        helper2( ls, node, 0);
+
+        node.val = 0;
+
+        if( node.left != null)node.left.val = 0;
+        if( node.right != null)node.right.val = 0;
+
+        return node;
+    }
+    private void helper2( List<Integer> ls, TreeNode node, int lvl){
+        if( node.left == null && node.right == null)return;
+
+        if( lvl > 0){
+            int value = 0;
+            if( node.left != null)value += node.left.val;
+            if( node.right != null)value += node.right.val;
+
+            int newVal = ls.get( lvl+1) - value;
+
+            if( node.left != null)node.left.val = newVal;
+            if( node.right != null)node.right.val = newVal;
+        }
+
+        if( node.left != null)helper2( ls, node.left, lvl+1);
+        if( node.right != null)helper2( ls, node.right, lvl+1);
+
+        return;
+
+    }
+    private void helper( List<Integer> ls, TreeNode node, int lvl){
+        if( node == null)return;
+
+        if( lvl >= ls.size()){
+            ls.add( node.val);
+        }else{
+            ls.set( lvl, ls.get( lvl) + node.val);
+        }
+
+        helper( ls, node.left, lvl+1);
+        helper( ls, node.right, lvl+1);
+
+        return;
+    }
+}
