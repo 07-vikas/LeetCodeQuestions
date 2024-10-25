@@ -1,0 +1,24 @@
+class Solution {
+    public List<String> removeSubfolders(String[] folder) {
+        return fn( folder);
+    }
+    public List<String> fn( String[] ar){
+        Arrays.sort( ar);
+        Set<String> set = new HashSet<>();
+
+        for( String str : ar){
+            for( int i = 1; i<str.length(); i++){
+                if( str.charAt( i) == '/' && set.contains( str.substring( 0, i))){
+                    break;
+                }
+
+                if( i == (str.length()-1)){
+                    set.add( str);
+                }
+            }
+        }
+
+        List<String> ls = new ArrayList<>(set);
+        return ls;
+    }
+}
